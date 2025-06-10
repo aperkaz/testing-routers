@@ -1,7 +1,7 @@
 import { getUsers } from "@/http-sdk";
 import { createFileRoute, Link } from "@tanstack/react-router";
 
-export const Route = createFileRoute("/users/$userId")({
+export const Route = createFileRoute("/_authenticated/users/$userId")({
   loader: async ({ params }) => {
     const users = await getUsers();
     const match = users.filter((u) => u.id === params.userId);

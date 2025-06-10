@@ -1,14 +1,17 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import "./MainLayout.css";
+import "../MainLayout.css";
 
-export const Route = createFileRoute("/")({
+/**
+ * '/' layout
+ */
+export const Route = createFileRoute("/_authenticated/")({
   component: MainLayout,
 });
 
 function MainLayout() {
   return (
     <div>
-      <h1>Index page</h1>
+      <h1>Welcome authenticated user!</h1>
       <Link className="App-link" to="/users">
         To users page
       </Link>

@@ -11,117 +11,169 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as AboutImport } from './routes/about'
-import { Route as IndexImport } from './routes/index'
-import { Route as UsersIndexImport } from './routes/users.index'
-import { Route as UsersUserIdImport } from './routes/users.$userId'
+import { Route as AuthenticatedRouteImport } from './routes/_authenticated/route'
+import { Route as AuthenticatedIndexImport } from './routes/_authenticated/index'
+import { Route as AuthenticatedAboutImport } from './routes/_authenticated/about'
+import { Route as AuthLoginImport } from './routes/_auth/login'
+import { Route as AuthenticatedUsersIndexImport } from './routes/_authenticated/users.index'
+import { Route as AuthenticatedUsersUserIdImport } from './routes/_authenticated/users.$userId'
 
 // Create/Update Routes
 
-const AboutRoute = AboutImport.update({
-  id: '/about',
-  path: '/about',
+const AuthenticatedRouteRoute = AuthenticatedRouteImport.update({
+  id: '/_authenticated',
   getParentRoute: () => rootRoute,
 } as any)
 
-const IndexRoute = IndexImport.update({
+const AuthenticatedIndexRoute = AuthenticatedIndexImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+
+const AuthenticatedAboutRoute = AuthenticatedAboutImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+
+const AuthLoginRoute = AuthLoginImport.update({
+  id: '/_auth/login',
+  path: '/login',
   getParentRoute: () => rootRoute,
 } as any)
 
-const UsersIndexRoute = UsersIndexImport.update({
+const AuthenticatedUsersIndexRoute = AuthenticatedUsersIndexImport.update({
   id: '/users/',
   path: '/users/',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 
-const UsersUserIdRoute = UsersUserIdImport.update({
+const AuthenticatedUsersUserIdRoute = AuthenticatedUsersUserIdImport.update({
   id: '/users/$userId',
   path: '/users/$userId',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexImport
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof AuthenticatedRouteImport
       parentRoute: typeof rootRoute
     }
-    '/about': {
-      id: '/about'
+    '/_auth/login': {
+      id: '/_auth/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof AuthLoginImport
+      parentRoute: typeof rootRoute
+    }
+    '/_authenticated/about': {
+      id: '/_authenticated/about'
       path: '/about'
       fullPath: '/about'
-      preLoaderRoute: typeof AboutImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof AuthenticatedAboutImport
+      parentRoute: typeof AuthenticatedRouteImport
     }
-    '/users/$userId': {
-      id: '/users/$userId'
+    '/_authenticated/': {
+      id: '/_authenticated/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedIndexImport
+      parentRoute: typeof AuthenticatedRouteImport
+    }
+    '/_authenticated/users/$userId': {
+      id: '/_authenticated/users/$userId'
       path: '/users/$userId'
       fullPath: '/users/$userId'
-      preLoaderRoute: typeof UsersUserIdImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof AuthenticatedUsersUserIdImport
+      parentRoute: typeof AuthenticatedRouteImport
     }
-    '/users/': {
-      id: '/users/'
+    '/_authenticated/users/': {
+      id: '/_authenticated/users/'
       path: '/users'
       fullPath: '/users'
-      preLoaderRoute: typeof UsersIndexImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof AuthenticatedUsersIndexImport
+      parentRoute: typeof AuthenticatedRouteImport
     }
   }
 }
 
 // Create and export the route tree
 
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedAboutRoute: typeof AuthenticatedAboutRoute
+  AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
+  AuthenticatedUsersUserIdRoute: typeof AuthenticatedUsersUserIdRoute
+  AuthenticatedUsersIndexRoute: typeof AuthenticatedUsersIndexRoute
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedAboutRoute: AuthenticatedAboutRoute,
+  AuthenticatedIndexRoute: AuthenticatedIndexRoute,
+  AuthenticatedUsersUserIdRoute: AuthenticatedUsersUserIdRoute,
+  AuthenticatedUsersIndexRoute: AuthenticatedUsersIndexRoute,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/about': typeof AboutRoute
-  '/users/$userId': typeof UsersUserIdRoute
-  '/users': typeof UsersIndexRoute
+  '': typeof AuthenticatedRouteRouteWithChildren
+  '/login': typeof AuthLoginRoute
+  '/about': typeof AuthenticatedAboutRoute
+  '/': typeof AuthenticatedIndexRoute
+  '/users/$userId': typeof AuthenticatedUsersUserIdRoute
+  '/users': typeof AuthenticatedUsersIndexRoute
 }
 
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/about': typeof AboutRoute
-  '/users/$userId': typeof UsersUserIdRoute
-  '/users': typeof UsersIndexRoute
+  '/login': typeof AuthLoginRoute
+  '/about': typeof AuthenticatedAboutRoute
+  '/': typeof AuthenticatedIndexRoute
+  '/users/$userId': typeof AuthenticatedUsersUserIdRoute
+  '/users': typeof AuthenticatedUsersIndexRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
-  '/': typeof IndexRoute
-  '/about': typeof AboutRoute
-  '/users/$userId': typeof UsersUserIdRoute
-  '/users/': typeof UsersIndexRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/_auth/login': typeof AuthLoginRoute
+  '/_authenticated/about': typeof AuthenticatedAboutRoute
+  '/_authenticated/': typeof AuthenticatedIndexRoute
+  '/_authenticated/users/$userId': typeof AuthenticatedUsersUserIdRoute
+  '/_authenticated/users/': typeof AuthenticatedUsersIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/users/$userId' | '/users'
+  fullPaths: '' | '/login' | '/about' | '/' | '/users/$userId' | '/users'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/users/$userId' | '/users'
-  id: '__root__' | '/' | '/about' | '/users/$userId' | '/users/'
+  to: '/login' | '/about' | '/' | '/users/$userId' | '/users'
+  id:
+    | '__root__'
+    | '/_authenticated'
+    | '/_auth/login'
+    | '/_authenticated/about'
+    | '/_authenticated/'
+    | '/_authenticated/users/$userId'
+    | '/_authenticated/users/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  AboutRoute: typeof AboutRoute
-  UsersUserIdRoute: typeof UsersUserIdRoute
-  UsersIndexRoute: typeof UsersIndexRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  AuthLoginRoute: typeof AuthLoginRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
-  AboutRoute: AboutRoute,
-  UsersUserIdRoute: UsersUserIdRoute,
-  UsersIndexRoute: UsersIndexRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  AuthLoginRoute: AuthLoginRoute,
 }
 
 export const routeTree = rootRoute
@@ -134,23 +186,37 @@ export const routeTree = rootRoute
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
-        "/",
-        "/about",
-        "/users/$userId",
-        "/users/"
+        "/_authenticated",
+        "/_auth/login"
       ]
     },
-    "/": {
-      "filePath": "index.tsx"
+    "/_authenticated": {
+      "filePath": "_authenticated/route.tsx",
+      "children": [
+        "/_authenticated/about",
+        "/_authenticated/",
+        "/_authenticated/users/$userId",
+        "/_authenticated/users/"
+      ]
     },
-    "/about": {
-      "filePath": "about.tsx"
+    "/_auth/login": {
+      "filePath": "_auth/login.tsx"
     },
-    "/users/$userId": {
-      "filePath": "users.$userId.tsx"
+    "/_authenticated/about": {
+      "filePath": "_authenticated/about.tsx",
+      "parent": "/_authenticated"
     },
-    "/users/": {
-      "filePath": "users.index.tsx"
+    "/_authenticated/": {
+      "filePath": "_authenticated/index.tsx",
+      "parent": "/_authenticated"
+    },
+    "/_authenticated/users/$userId": {
+      "filePath": "_authenticated/users.$userId.tsx",
+      "parent": "/_authenticated"
+    },
+    "/_authenticated/users/": {
+      "filePath": "_authenticated/users.index.tsx",
+      "parent": "/_authenticated"
     }
   }
 }

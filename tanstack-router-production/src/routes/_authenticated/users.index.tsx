@@ -1,7 +1,7 @@
 import { getUsers } from "@/http-sdk";
 import { createFileRoute, Link } from "@tanstack/react-router";
 
-export const Route = createFileRoute("/users/")({
+export const Route = createFileRoute("/_authenticated/users/")({
   loader: async () => await getUsers(),
   component: Users,
 });

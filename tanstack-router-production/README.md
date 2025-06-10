@@ -10,10 +10,8 @@ The following capabilities will be tested:
 - ✅ lazy loading (one line in viteconfig!)
 - ✅ route-level loaders (using path-params)
 - ✅ typed path params (navigation and access)
-- auth middleware in routes
-- scalability of file-based routing
-- support for code-driven router manipulation
-- hide / abstract route from visualization
+- ✅ auth middleware in routes (protected routes)
+- 🚧 hide / abstract route from visualization, route masking (route stacking)
 - .......
 
 ---
