@@ -1,14 +1,8 @@
+import { getUsers } from "@/http-sdk";
 import { createFileRoute, Link } from "@tanstack/react-router";
 
-export const Route = createFileRoute("/users")({
-  loader: async () => {
-    // mock api call
-    return [
-      { name: "Bob", age: 24 },
-      { name: "Sara", age: 33 },
-      { name: "Jeff", age: 99 },
-    ];
-  },
+export const Route = createFileRoute("/users/")({
+  loader: async () => await getUsers(),
   component: Users,
 });
 
@@ -22,8 +16,10 @@ function Users() {
       <p>Data loaded in router handler:</p>
       <ul>
         {data.map((d) => (
-          <li>
-            "{d.name}", age: {d.age}
+          <li key={d.id}>
+            <Link to="/users/$userId" params={{ userId: d.id }}>
+              [{d.id}] "{d.name}" - age: {d.age}
+            </Link>
           </li>
         ))}
       </ul>

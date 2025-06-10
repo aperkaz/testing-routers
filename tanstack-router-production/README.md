@@ -4,13 +4,16 @@ This project aims at evaluating the features and DX of tanstack-router in a prod
 
 The following capabilities will be tested:
 
-- layout views
-- nested routes
-- lazy loading
+- ✅ layout views
+- ✅ nested routes
+- ✅ type-safe navigation (Link)
+- ✅ lazy loading (one line in viteconfig!)
+- ✅ route-level loaders (using path-params)
+- ✅ typed path params (navigation and access)
 - auth middleware in routes
 - scalability of file-based routing
 - support for code-driven router manipulation
-- type safety (navigation...)
+- hide / abstract route from visualization
 - .......
 
 ---
