@@ -17,6 +17,8 @@ import { Route as AuthenticatedAboutImport } from './routes/_authenticated/about
 import { Route as AuthLoginImport } from './routes/_auth/login'
 import { Route as AuthenticatedUsersIndexImport } from './routes/_authenticated/users.index'
 import { Route as AuthenticatedUsersUserIdImport } from './routes/_authenticated/users.$userId'
+import { Route as AuthenticatedAppSettingsImport } from './routes/_authenticated/app/settings'
+import { Route as AuthenticatedAppChatIdChatImport } from './routes/_authenticated/app/$chatId.chat'
 
 // Create/Update Routes
 
@@ -55,6 +57,20 @@ const AuthenticatedUsersUserIdRoute = AuthenticatedUsersUserIdImport.update({
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 
+const AuthenticatedAppSettingsRoute = AuthenticatedAppSettingsImport.update({
+  id: '/app/settings',
+  path: '/app/settings',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+
+const AuthenticatedAppChatIdChatRoute = AuthenticatedAppChatIdChatImport.update(
+  {
+    id: '/app/$chatId/chat',
+    path: '/app/$chatId/chat',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any,
+)
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -87,6 +103,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedIndexImport
       parentRoute: typeof AuthenticatedRouteImport
     }
+    '/_authenticated/app/settings': {
+      id: '/_authenticated/app/settings'
+      path: '/app/settings'
+      fullPath: '/app/settings'
+      preLoaderRoute: typeof AuthenticatedAppSettingsImport
+      parentRoute: typeof AuthenticatedRouteImport
+    }
     '/_authenticated/users/$userId': {
       id: '/_authenticated/users/$userId'
       path: '/users/$userId'
@@ -101,6 +124,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedUsersIndexImport
       parentRoute: typeof AuthenticatedRouteImport
     }
+    '/_authenticated/app/$chatId/chat': {
+      id: '/_authenticated/app/$chatId/chat'
+      path: '/app/$chatId/chat'
+      fullPath: '/app/$chatId/chat'
+      preLoaderRoute: typeof AuthenticatedAppChatIdChatImport
+      parentRoute: typeof AuthenticatedRouteImport
+    }
   }
 }
 
@@ -109,15 +139,19 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedAboutRoute: typeof AuthenticatedAboutRoute
   AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
+  AuthenticatedAppSettingsRoute: typeof AuthenticatedAppSettingsRoute
   AuthenticatedUsersUserIdRoute: typeof AuthenticatedUsersUserIdRoute
   AuthenticatedUsersIndexRoute: typeof AuthenticatedUsersIndexRoute
+  AuthenticatedAppChatIdChatRoute: typeof AuthenticatedAppChatIdChatRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAboutRoute: AuthenticatedAboutRoute,
   AuthenticatedIndexRoute: AuthenticatedIndexRoute,
+  AuthenticatedAppSettingsRoute: AuthenticatedAppSettingsRoute,
   AuthenticatedUsersUserIdRoute: AuthenticatedUsersUserIdRoute,
   AuthenticatedUsersIndexRoute: AuthenticatedUsersIndexRoute,
+  AuthenticatedAppChatIdChatRoute: AuthenticatedAppChatIdChatRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
@@ -128,16 +162,20 @@ export interface FileRoutesByFullPath {
   '/login': typeof AuthLoginRoute
   '/about': typeof AuthenticatedAboutRoute
   '/': typeof AuthenticatedIndexRoute
+  '/app/settings': typeof AuthenticatedAppSettingsRoute
   '/users/$userId': typeof AuthenticatedUsersUserIdRoute
   '/users': typeof AuthenticatedUsersIndexRoute
+  '/app/$chatId/chat': typeof AuthenticatedAppChatIdChatRoute
 }
 
 export interface FileRoutesByTo {
   '/login': typeof AuthLoginRoute
   '/about': typeof AuthenticatedAboutRoute
   '/': typeof AuthenticatedIndexRoute
+  '/app/settings': typeof AuthenticatedAppSettingsRoute
   '/users/$userId': typeof AuthenticatedUsersUserIdRoute
   '/users': typeof AuthenticatedUsersIndexRoute
+  '/app/$chatId/chat': typeof AuthenticatedAppChatIdChatRoute
 }
 
 export interface FileRoutesById {
@@ -146,23 +184,42 @@ export interface FileRoutesById {
   '/_auth/login': typeof AuthLoginRoute
   '/_authenticated/about': typeof AuthenticatedAboutRoute
   '/_authenticated/': typeof AuthenticatedIndexRoute
+  '/_authenticated/app/settings': typeof AuthenticatedAppSettingsRoute
   '/_authenticated/users/$userId': typeof AuthenticatedUsersUserIdRoute
   '/_authenticated/users/': typeof AuthenticatedUsersIndexRoute
+  '/_authenticated/app/$chatId/chat': typeof AuthenticatedAppChatIdChatRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '' | '/login' | '/about' | '/' | '/users/$userId' | '/users'
+  fullPaths:
+    | ''
+    | '/login'
+    | '/about'
+    | '/'
+    | '/app/settings'
+    | '/users/$userId'
+    | '/users'
+    | '/app/$chatId/chat'
   fileRoutesByTo: FileRoutesByTo
-  to: '/login' | '/about' | '/' | '/users/$userId' | '/users'
+  to:
+    | '/login'
+    | '/about'
+    | '/'
+    | '/app/settings'
+    | '/users/$userId'
+    | '/users'
+    | '/app/$chatId/chat'
   id:
     | '__root__'
     | '/_authenticated'
     | '/_auth/login'
     | '/_authenticated/about'
     | '/_authenticated/'
+    | '/_authenticated/app/settings'
     | '/_authenticated/users/$userId'
     | '/_authenticated/users/'
+    | '/_authenticated/app/$chatId/chat'
   fileRoutesById: FileRoutesById
 }
 
@@ -195,8 +252,10 @@ export const routeTree = rootRoute
       "children": [
         "/_authenticated/about",
         "/_authenticated/",
+        "/_authenticated/app/settings",
         "/_authenticated/users/$userId",
-        "/_authenticated/users/"
+        "/_authenticated/users/",
+        "/_authenticated/app/$chatId/chat"
       ]
     },
     "/_auth/login": {
@@ -210,12 +269,20 @@ export const routeTree = rootRoute
       "filePath": "_authenticated/index.tsx",
       "parent": "/_authenticated"
     },
+    "/_authenticated/app/settings": {
+      "filePath": "_authenticated/app/settings.tsx",
+      "parent": "/_authenticated"
+    },
     "/_authenticated/users/$userId": {
       "filePath": "_authenticated/users.$userId.tsx",
       "parent": "/_authenticated"
     },
     "/_authenticated/users/": {
       "filePath": "_authenticated/users.index.tsx",
+      "parent": "/_authenticated"
+    },
+    "/_authenticated/app/$chatId/chat": {
+      "filePath": "_authenticated/app/$chatId.chat.tsx",
       "parent": "/_authenticated"
     }
   }

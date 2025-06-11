@@ -19,6 +19,15 @@ function MainLayout() {
       <Link className="App-link" to="/about">
         To about page
       </Link>
+      <br />
+      <br />
+      <Link
+        className="App-link"
+        to="/app/$chatId/chat"
+        params={{ chatId: "1234" }}
+      >
+        To /app pages
+      </Link>
     </div>
   );
 }

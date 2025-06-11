@@ -11,7 +11,7 @@ The following capabilities will be tested:
 - ✅ route-level loaders (using path-params)
 - ✅ typed path params (navigation and access)
 - ✅ auth middleware in routes (protected routes)
-- 🚧 hide / abstract route from visualization, route masking (route stacking)
+- ✅ hide / abstract route from visualization, route masking (route stacking)
 - .......
 
 ---
